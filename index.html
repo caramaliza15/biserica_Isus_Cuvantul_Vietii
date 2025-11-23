@@ -26,7 +26,21 @@
     white-space: nowrap;  /* ca să stea pe o singură linie */
   }
 }
+#menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3); /* gri transparent */
+  display: none;
+  z-index: 9; /* sub meniu, dar peste restul paginii */
+}
 
+/* când meniul este deschis */
+.menu-open #menu-overlay {
+  display: block;
+}
   </style>
 </head>
 <body class="bg-white text-[#1f2937]">
@@ -91,6 +105,8 @@
     </ul>
   </div>
 </header>
+
+<div id="menu-overlay"></div>
 
 <!-- Hero / Verset -->
 <section id="acasa" class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
@@ -358,6 +374,21 @@ const menu = document.getElementById('mobile-menu');
 btn.addEventListener('click', () => {
   menu.classList.toggle('hidden');
 });
+const hamburger = document.querySelector('.hamburger');
+const navMenu = document.querySelector('.nav-menu');
+const overlay = document.getElementById('menu-overlay');
+
+hamburger.addEventListener('click', () => {
+  document.body.classList.toggle('menu-open');
+  navMenu.classList.toggle('active');
+});
+
+// Închide meniul când se apasă pe overlay
+overlay.addEventListener('click', () => {
+  document.body.classList.remove('menu-open');
+  navMenu.classList.remove('active');
+});
+
 </script>
 
 </body>
