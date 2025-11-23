@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Isus Cuvântul Vieții</title>
+  <site-title>Isus Cuvântul Vieții</site-title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
@@ -22,6 +22,13 @@
     h1[data-i18n-html="site_name"] {
       font-size: 0.9rem !important;
     }
+  }
+    /* Micșorează titlul ca să încapă pe același rând cu meniul */
+  @media (max-width: 600px) {
+      .site-title {
+          font-size: 1rem;   /* ajustează – poți pune 0.9rem dacă vrei și mai mic */
+          white-space: nowrap;  /* îl forțează să stea pe o linie */
+      }
   }
   </style>
 </head>
