@@ -36,7 +36,9 @@
     max-width: 100%;
     overflow-x: hidden;
   }
-
+  #mobile-menu {
+  position: static;
+}
   </style>
 </head>
 <body class="bg-white text-[#1f2937]">
@@ -85,7 +87,7 @@
   </div>
 
   <!-- Meniu mobil -->
-  <div id="mobile-menu" class="hidden md:hidden bg-white w-full shadow-md">
+<div id="mobile-menu" class="hidden md:hidden bg-white w-full shadow-md absolute top-full left-0 z-40">
     <ul class="flex flex-col gap-4 p-4 text-center">
       <li><a href="#acasa" class="hover:text-[#41678f]" data-i18n="home">Acasă</a></li>
       <li><a href="#despre" class="hover:text-[#41678f]" data-i18n="about">Despre</a></li>
