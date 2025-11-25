@@ -1,93 +1,76 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Isus Cuvântul Vieții</title>
-
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Fonts & AOS -->
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
-
   <style>
-    :root {
-      --text-color: #1f2937;
-      --accent: #41678f;
-    }
-
-    html, body {
-      height: 100%;
-      -webkit-text-size-adjust: 100%;
-      overflow-x: hidden; /* evităm scroll orizontal */
-      overflow-y: auto;   /* asigurăm scroll vertical */
-    }
-
-    body {
-      font-family: 'Nunito', sans-serif;
-      color: var(--text-color);
-      background: #ffffff;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      position: relative;
-    }
-
-    /* HEADER FIXED are nevoie de z-index mare */
-    header.fixed {
-      z-index: 60;
-    }
-
-    /* Puls animation (doar ușor) */
+    body { font-family: 'Nunito', sans-serif; }
+    html { scroll-behavior: smooth; }
     .pulse-animation {
-      animation: pulse 4s infinite;
+      animation: pulse 2s infinite;
     }
     @keyframes pulse {
-      0%,100% { opacity: 1; transform: translateY(0); }
-      50% { opacity: 0.9; transform: translateY(-3px); }
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
     }
-
-    /* Mobile title small tweak */
+    /* Micșorează titlul doar pe telefoane */
     @media (max-width: 640px) {
-      header h1 { font-size: 1.05rem; line-height:1.18; white-space:nowrap; }
-    }
+  header h1 {
+    font-size: 1.1rem !important;   /* un pic mai mare decât 1rem */
+    line-height: 1.20 !important;
+    white-space: nowrap;  /* ca să stea pe o singură linie */
+  }
+}
+#menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3); /* gri transparent */
+  display: none;
+  z-index: 9; /* sub meniu, dar peste restul paginii */
+}
 
-    /* overlay pentru mobil (ascuns implicit) */
-    #menu-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.35);
-      display: none;
-      z-index: 50;
-      touch-action: auto;
-    }
+/* când meniul este deschis */
+.menu-open #menu-overlay {
+  display: block;
+}
+body {
+    overflow-x: hidden;
+    position: relative;
+}
+  /* Elimină scroll-ul orizontal provocat de elemente care depășesc ecranul */
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
 
-    /* când meniul este deschis, arătăm overlay */
-    body.menu-open #menu-overlay {
-      display: block;
-    }
+  /* Forțează toate elementele să nu depășească ecranul */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
 
-    /* Fix pentru imagini/iframe */
-    img, iframe, video {
-      max-width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    /* Nu forțăm max-width pe toate elementele (era cauza unor comportamente ciudate) */
+  /* Fix pentru imagini și iframe-uri */
+  img, iframe {
+    max-width: 100%;
+    display: block;
+  }
   </style>
 </head>
 <body class="bg-white text-[#1f2937]">
 
 <!-- Header -->
-<header class="fixed w-full bg-white/95 backdrop-blur-md shadow z-50">
+<header class="fixed w-full bg-white/90 backdrop-blur-md shadow z-50">
   <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center px-4 py-2">
     <!-- Logo + Titlu -->
-    <div class="flex items-center space-x-3">
+    <div class="flex items-center space-x-2">
       <img src="images/logo.png" alt="Logo Biserica" class="h-14 w-auto" />
       <div class="leading-tight">
         <h1 class="text-[#41678f] text-xl md:text-2xl font-[Cinzel] uppercase tracking-wider drop-shadow-sm" data-i18n-html="site_name">
@@ -118,16 +101,15 @@
 
     <!-- Hamburger mobil -->
     <div class="md:hidden flex items-center">
-      <button id="menu-btn" aria-label="Deschide meniul" class="focus:outline-none p-2 rounded">
-        <svg class="w-6 h-6 text-[#41678f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-             xmlns="http://www.w3.org/2000/svg">
+      <button id="menu-btn" class="focus:outline-none">
+        <svg class="w-6 h-6 text-[#41678f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
       </button>
     </div>
   </div>
 
-  <!-- Meniu mobil (it will slide down) -->
+  <!-- Meniu mobil -->
   <div id="mobile-menu" class="hidden md:hidden bg-white w-full shadow-md">
     <ul class="flex flex-col gap-4 p-4 text-center">
       <li><a href="#acasa" class="hover:text-[#41678f]" data-i18n="home">Acasă</a></li>
@@ -145,17 +127,13 @@
   </div>
 </header>
 
-<!-- overlay (hidden implicit) -->
-<div id="menu-overlay" aria-hidden="true"></div>
-
-<!-- Spacer to account for fixed header height so content isn't under it -->
-<div id="header-spacer" class="h-[72px] md:h-[80px]"></div>
+<div id="menu-overlay"></div>
 
 <!-- Hero / Verset -->
-<section id="acasa" class="relative w-full min-h-[70vh] flex items-center justify-center overflow-visible">
+<section id="acasa" class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
   <img src="images/img1.jpg" alt="Imagine verset" class="absolute inset-0 w-full h-full object-cover" />
   <div class="absolute inset-0 bg-black/40"></div>
-  <div class="relative z-10 text-center pulse-animation px-4 py-8">
+  <div class="relative z-10 text-center pulse-animation px-4">
     <p class="text-white text-2xl md:text-4xl font-bold leading-snug" data-i18n="welcome_verse">
       „Fiindcă atât de mult a iubit Dumnezeu lumea, că a dat pe singurul Lui Fiu, pentru ca oricine crede în El să nu piară, ci să aibă viață veșnică.”
     </p>
@@ -254,16 +232,14 @@
 
 <!-- Footer -->
 <footer class="bg-[#41678f] text-white text-center py-6">
-  <p>&copy; 2025 <span data-i18n="title">Isus Cuvântul Vieții</span>, Lozova | <span data-i18n="follow_us">Urmărește-ne pe pagina noastră de</span>
+  <p>&copy; 2025 <span data-i18n="title">Isus Cuvântul Vieții</span>, Lozova | <span data-i18n="follow_us">Urmărește-ne pe pagina noastră de</span> 
     <a href="https://www.instagram.com/biserica_isus_cuvantul_vietii/" target="_blank" class="underline">Instagram</a>
   </p>
 </footer>
 
-<!-- AOS -->
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script> AOS.init({ once: true }); </script>
+<script>AOS.init();</script>
 
-<!-- TRANSLATIONS (RO / EN / RU) -->
 <script>
 const translations = {
   ro: {
@@ -397,110 +373,52 @@ const translations = {
   }
 };
 
-/* Funcții pentru traduceri */
 function setLang(lang) {
-  // text simple
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
-    if (translations[lang] && translations[lang][key] !== undefined) {
-      el.textContent = translations[lang][key];
-    }
+    if (translations[lang][key]) el.textContent = translations[lang][key];
   });
-  // html (titlu cu span)
   document.querySelectorAll("[data-i18n-html]").forEach(el => {
     const key = el.getAttribute("data-i18n-html");
-    if (translations[lang] && translations[lang][key] !== undefined) {
-      el.innerHTML = translations[lang][key];
-    }
+    if (translations[lang][key]) el.innerHTML = translations[lang][key];
   });
-  // placeholders
   document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
     const key = el.getAttribute("data-i18n-placeholder");
-    if (translations[lang] && translations[lang][key] !== undefined) {
-      el.setAttribute("placeholder", translations[lang][key]);
-    }
+    if (translations[lang][key]) el.setAttribute("placeholder", translations[lang][key]);
   });
 }
-
-/* Setare limbă implicită RO la încărcare */
-document.addEventListener("DOMContentLoaded", () => {
-  setLang('ro');
-});
 </script>
-
-<!-- MENU + small JS fixes -->
 <script>
-  // Elements
-  const menuBtn = document.getElementById('menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const overlay = document.getElementById('menu-overlay');
+const btn = document.getElementById('menu-btn');
+const menu = document.getElementById('mobile-menu');
 
-  // Toggle mobile menu: show/hide and lock body scroll when open
-  if (menuBtn) {
-    menuBtn.addEventListener('click', () => {
-      const isHidden = mobileMenu.classList.contains('hidden');
-      if (isHidden) {
-        mobileMenu.classList.remove('hidden');
-        document.body.classList.add('menu-open');
-        // optional: prevent body scroll while menu open on small screens
-        document.body.style.overflow = 'hidden';
-      } else {
-        mobileMenu.classList.add('hidden');
-        document.body.classList.remove('menu-open');
-        document.body.style.overflow = ''; // restore
+btn.addEventListener('click', () => {
+  menu.classList.toggle('hidden');
+});
+const hamburger = document.querySelector('.hamburger');
+const navMenu = document.querySelector('.nav-menu');
+const overlay = document.getElementById('menu-overlay');
+
+hamburger.addEventListener('click', () => {
+  document.body.classList.toggle('menu-open');
+  navMenu.classList.toggle('active');
+});
+
+// Închide meniul când se apasă pe overlay
+overlay.addEventListener('click', () => {
+  document.body.classList.remove('menu-open');
+  navMenu.classList.remove('active');
+});
+
+  // Fix automat pentru orice element care creează scroll orizontal
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('*').forEach(el => {
+      if (el.scrollWidth > document.documentElement.clientWidth) {
+        el.style.overflowX = "hidden";
       }
     });
-  }
-
-  // Click on overlay closes menu
-  if (overlay) {
-    overlay.addEventListener('click', () => {
-      if (!mobileMenu.classList.contains('hidden')) {
-        mobileMenu.classList.add('hidden');
-      }
-      document.body.classList.remove('menu-open');
-      document.body.style.overflow = '';
-    });
-  }
-
-  // Close mobile menu when clicking a link inside it (to allow scroll after navigation)
-  if (mobileMenu) {
-    mobileMenu.addEventListener('click', (e) => {
-      const target = e.target;
-      if (target.tagName === 'A') {
-        // close menu
-        mobileMenu.classList.add('hidden');
-        document.body.classList.remove('menu-open');
-        document.body.style.overflow = '';
-      }
-    });
-  }
-
-  // Accessibility: close menu on escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-        mobileMenu.classList.add('hidden');
-        document.body.classList.remove('menu-open');
-        document.body.style.overflow = '';
-      }
-    }
   });
 
-  // Small safe fix: if some element causes horizontal overflow, we only hide its overflow-x
-  window.addEventListener('load', () => {
-    // attempt to find elements wider than viewport and set overflow-x hidden on them only
-    try {
-      document.querySelectorAll('body *').forEach(el => {
-        if (el.scrollWidth > document.documentElement.clientWidth + 2) {
-          el.style.overflowX = 'hidden';
-        }
-      });
-    } catch (err) {
-      // nu stricăm nimic dacă ceva e protejat
-      console.warn('Overflow fix skip:', err);
-    }
-  });
 </script>
 
 </body>
