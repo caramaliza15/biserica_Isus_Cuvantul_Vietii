@@ -45,6 +45,23 @@ body {
     overflow-x: hidden;
     position: relative;
 }
+  /* Elimină scroll-ul orizontal provocat de elemente care depășesc ecranul */
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Forțează toate elementele să nu depășească ecranul */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  /* Fix pentru imagini și iframe-uri */
+  img, iframe {
+    max-width: 100%;
+    display: block;
+  }
   </style>
 </head>
 <body class="bg-white text-[#1f2937]">
@@ -392,6 +409,15 @@ overlay.addEventListener('click', () => {
   document.body.classList.remove('menu-open');
   navMenu.classList.remove('active');
 });
+
+  // Fix automat pentru orice element care creează scroll orizontal
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('*').forEach(el => {
+      if (el.scrollWidth > document.documentElement.clientWidth) {
+        el.style.overflowX = "hidden";
+      }
+    });
+  });
 
 </script>
 
