@@ -18,49 +18,10 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.7; }
     }
-    /* Micșorează titlul doar pe telefoane */
-    @media (max-width: 640px) {
-  header h1 {
-    font-size: 1.1rem !important;   /* un pic mai mare decât 1rem */
-    line-height: 1.20 !important;
-    white-space: nowrap;  /* ca să stea pe o singură linie */
-  }
-}
-#menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.3); /* gri transparent */
-  display: none;
-  z-index: 9; /* sub meniu, dar peste restul paginii */
-}
-
-/* când meniul este deschis */
-.menu-open #menu-overlay {
-  display: block;
-}
-body {
-    overflow-x: hidden;
-    position: relative;
-}
-  /* Elimină scroll-ul orizontal provocat de elemente care depășesc ecranul */
-  html, body {
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  /* Forțează toate elementele să nu depășească ecranul */
-  *, *::before, *::after {
-    box-sizing: border-box;
-    max-width: 100%;
-  }
-
-  /* Fix pentru imagini și iframe-uri */
-  img, iframe {
-    max-width: 100%;
-    display: block;
+    @media (max-width: 370px) {
+    h1[data-i18n-html="site_name"] {
+      font-size: 0.9rem !important;
+    }
   }
   </style>
 </head>
@@ -68,9 +29,9 @@ body {
 
 <!-- Header -->
 <header class="fixed w-full bg-white/90 backdrop-blur-md shadow z-50">
-  <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center px-4 py-2">
+  <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2">
     <!-- Logo + Titlu -->
-    <div class="flex items-center space-x-2">
+    <div class="flex items-center space-x-2 flex-1">
       <img src="images/logo.png" alt="Logo Biserica" class="h-14 w-auto" />
       <div class="leading-tight">
         <h1 class="text-[#41678f] text-xl md:text-2xl font-[Cinzel] uppercase tracking-wider drop-shadow-sm" data-i18n-html="site_name">
@@ -126,8 +87,6 @@ body {
     </ul>
   </div>
 </header>
-
-<div id="menu-overlay"></div>
 
 <!-- Hero / Verset -->
 <section id="acasa" class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
@@ -395,30 +354,6 @@ const menu = document.getElementById('mobile-menu');
 btn.addEventListener('click', () => {
   menu.classList.toggle('hidden');
 });
-const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
-const overlay = document.getElementById('menu-overlay');
-
-hamburger.addEventListener('click', () => {
-  document.body.classList.toggle('menu-open');
-  navMenu.classList.toggle('active');
-});
-
-// Închide meniul când se apasă pe overlay
-overlay.addEventListener('click', () => {
-  document.body.classList.remove('menu-open');
-  navMenu.classList.remove('active');
-});
-
-  // Fix automat pentru orice element care creează scroll orizontal
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('*').forEach(el => {
-      if (el.scrollWidth > document.documentElement.clientWidth) {
-        el.style.overflowX = "hidden";
-      }
-    });
-  });
-
 </script>
 
 </body>
