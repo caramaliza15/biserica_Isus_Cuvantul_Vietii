@@ -9,6 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
   <style>
+    body {
+  min-height: 100vh;
+}
     body { font-family: 'Nunito', sans-serif; }
     html { scroll-behavior: smooth; }
     .pulse-animation {
@@ -25,6 +28,10 @@
     line-height: 1.20 !important;
     white-space: nowrap;  /* ca să stea pe o singură linie */
   }
+  header {
+  height: auto;
+}
+  
 }
 #menu-overlay {
   position: fixed;
@@ -419,6 +426,10 @@ overlay.addEventListener('click', () => {
   });
 
 </script>
-
+<script>
+  window.addEventListener("load", () => {
+    document.body.style.minHeight = window.innerHeight + "px";
+  });
+</script>
 </body>
 </html>
