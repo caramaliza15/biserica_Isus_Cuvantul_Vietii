@@ -26,25 +26,29 @@
     white-space: nowrap;  /* ca să stea pe o singură linie */
   }
 }
-#menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.3); /* gri transparent */
-  display: none;
-  z-index: 9; /* sub meniu, dar peste restul paginii */
-  pointer-events: none;
+  #menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3); /* gri transparent */
+    display: none;
+    z-index: 9; /* sub meniu, dar peste restul paginii */
+    pointer-events: none;
+  }
+  /* Când meniul este deschis, overlay-ul poate primi click */
+.menu-open #menu-overlay {
+  pointer-events: auto;
 }
 
-  /* Elimină scroll-ul orizontal provocat de elemente care depășesc ecranul */
-body, html { overscroll-behavior: auto; }
+    /* Elimină scroll-ul orizontal provocat de elemente care depășesc ecranul */
+  body, html { overscroll-behavior: auto; }
 
-  /* Forțează toate elementele să nu depășească ecranul */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
+    /* Forțează toate elementele să nu depășească ecranul */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
 
   /* Fix pentru imagini și iframe-uri */
   img, iframe {
@@ -385,15 +389,45 @@ btn.addEventListener('click', () => {
 });
 
   // Fix automat pentru orice element care creează scroll orizontal
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('*').forEach(el => {
-      if (el.scrollWidth > document.documentElement.clientWidth) {
-        el.style.overflowX = "hidden";
-      }
-    });
-  });
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.style.overflowX = "hidden"; // doar body
+});
+
+  const menuOverlay = document.getElementById('menu-overlay');
+
+btn.addEventListener('click', () => {
+  menu.classList.toggle('hidden');
+
+  // Activează overlay-ul când meniul este deschis
+  if (!menu.classList.contains('hidden')) {
+    document.body.classList.add('menu-open');
+    menuOverlay.style.display = "block";
+  } else {
+    document.body.classList.remove('menu-open');
+    menuOverlay.style.display = "none";
+  }
+});
+
+// Ascunde meniul și overlay-ul la click pe overlay
+menuOverlay.addEventListener('click', () => {
+  menu.classList.add('hidden');
+  document.body.classList.remove('menu-open');
+  menuOverlay.style.display = "none";
+});
 
 </script>
-
+<script>
+// Scroll instant la ancore fără întârziere
+document.addEventListener("DOMContentLoaded", () => {
+  // Dacă URL-ul are hash
+  if (window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) {
+      // Scroll instant, nu smooth
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }
+  }
+});
+</script>
 </body>
 </html>
