@@ -46,10 +46,7 @@ body {
     position: relative;
 }
   /* Elimină scroll-ul orizontal provocat de elemente care depășesc ecranul */
-  html, body {
-    max-width: 100%;
-    overflow-x: hidden;
-  }
+body, html { overscroll-behavior: auto; }
 
   /* Forțează toate elementele să nu depășească ecranul */
 *, *::before, *::after {
