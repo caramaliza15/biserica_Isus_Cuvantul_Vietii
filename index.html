@@ -387,20 +387,6 @@ const menu = document.getElementById('mobile-menu');
 btn.addEventListener('click', () => {
   menu.classList.toggle('hidden');
 });
-const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
-const overlay = document.getElementById('menu-overlay');
-
-hamburger.addEventListener('click', () => {
-  document.body.classList.toggle('menu-open');
-  navMenu.classList.toggle('active');
-});
-
-// Închide meniul când se apasă pe overlay
-overlay.addEventListener('click', () => {
-  document.body.classList.remove('menu-open');
-  navMenu.classList.remove('active');
-});
 
   // Fix automat pentru orice element care creează scroll orizontal
   document.addEventListener("DOMContentLoaded", () => {
