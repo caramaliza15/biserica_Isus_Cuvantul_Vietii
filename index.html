@@ -424,7 +424,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const target = document.querySelector(window.location.hash);
     if (target) {
       // Scroll instant, nu smooth
-      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 });
