@@ -330,6 +330,14 @@ overlay.addEventListener('click', () => {
   menu.classList.add('hidden');
   document.body.classList.remove('menu-open');
 });
+
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    menu.classList.add('hidden');
+    document.body.classList.remove('menu-open');
+  });
+});
+
 </script>
 
 </body>
