@@ -43,7 +43,9 @@
 }
 
     /* Elimină scroll-ul orizontal provocat de elemente care depășesc ecranul */
-  body, html { overscroll-behavior: auto; }
+  body, html {
+  overflow-x: hidden;  /* previne scroll-ul orizontal */
+}
 
     /* Forțează toate elementele să nu depășească ecranul */
   *, *::before, *::after {
@@ -125,8 +127,8 @@
 <section id="acasa" class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
 <img src="images/img1.jpg"
      alt="Interior biserică - verset"
-     class="absolute inset-0 w-full h-full object-cover block"
-     loading="eager" />
+     class="absolute top-0 left-0 w-full h-full object-cover block"/>
+  <div class="absolute inset-0 bg-black/40"></div>
   <div class="relative z-10 text-center pulse-animation px-4">
     <p class="text-white text-2xl md:text-4xl font-bold leading-snug" data-i18n="welcome_verse">
       „Fiindcă atât de mult a iubit Dumnezeu lumea, că a dat pe singurul Lui Fiu, pentru ca oricine crede în El să nu piară, ci să aibă viață veșnică.”
@@ -159,11 +161,11 @@
 <section id="predici" class="scroll-mt-24 py-16 px-6 max-w-4xl mx-auto bg-white text-[#1f2937]" data-aos="fade-left">
   <h2 class="text-3xl font-bold text-center mb-6" data-i18n="sermons1">Predici Recente</h2>
   <div class="grid md:grid-cols-2 gap-6">
-    <div class="bg-[#41678f] text-white rounded shadow p-4 transform hover:scale-105 transition duration-300">
+    <div class="bg-[#41678f] text-white rounded shadow p-4 transform hover:scale-105 transition duration-300 max-w-full overflow-hidden">
       <h3 class="text-xl font-semibold" data-i18n="sermon1">Credința care mută munții</h3>
       <p class="text-sm" data-i18n="preacher1">Pastor Spiridon Cozaru</p>
     </div>
-    <div class="bg-[#41678f] text-white rounded shadow p-4 transform hover:scale-105 transition duration-300">
+    <div class="bg-[#41678f] text-white rounded shadow p-4 transform hover:scale-105 transition duration-300 max-w-full overflow-hidden">
       <h3 class="text-xl font-semibold" data-i18n="sermon2">Puterea Cuvântului</h3>
       <p class="text-sm" data-i18n="preacher2">Invitat special</p>
     </div>
