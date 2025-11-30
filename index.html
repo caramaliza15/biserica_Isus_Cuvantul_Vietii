@@ -93,7 +93,7 @@
 
     <!-- Hamburger mobil -->
     <div class="md:hidden flex items-center">
-      <button id="menu-btn" class="focus:outline-none">
+      <button id="menu-btn" class="focus:outline-none" aria-controls="mobile-menu" aria-expanded="false" aria-label="Meniu">
         <svg class="w-6 h-6 text-[#41678f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
@@ -123,7 +123,13 @@
 
 <!-- Hero / Verset -->
 <section id="acasa" class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
-  <img src="images/img1.jpg" alt="Imagine verset" class="absolute inset-0 w-full h-full object-cover" />
+  <picture>
+  <img src="images/img1.jpg"
+       alt="Interior biserică - verset"
+       width="1920" height="1080"
+       class="absolute inset-0 w-full h-full object-cover"
+       loading="eager" />
+</picture>
   <div class="absolute inset-0 bg-black/40"></div>
   <div class="relative z-10 text-center pulse-animation px-4">
     <p class="text-white text-2xl md:text-4xl font-bold leading-snug" data-i18n="welcome_verse">
@@ -196,12 +202,21 @@
     <!-- Formular de contact -->
     <div>
       <h2 class="text-3xl font-bold mb-6 text-left" data-i18n="contact_heading">Contactează-ne</h2>
-      <form action="https://formspree.io/f/xovwqown" method="POST" class="space-y-4">
-        <input type="text" name="name" placeholder="Nume" required class="w-full p-3 border rounded" data-i18n-placeholder="name">
-        <input type="email" name="email" placeholder="Email" required class="w-full p-3 border rounded" data-i18n-placeholder="email">
-        <textarea name="message" rows="5" placeholder="Mesaj" required class="w-full p-3 border rounded" data-i18n-placeholder="message"></textarea>
-        <button type="submit" class="bg-[#5D8CA7] text-white px-6 py-3 rounded hover:bg-[#4a708b] transition" data-i18n="submit">Trimite</button>
-      </form>
+<form action="https://formspree.io/f/xovwqown" method="POST" class="space-y-4" aria-label="Formular contact">
+  <div>
+    <label for="contact-name" class="sr-only">Nume</label>
+    <input id="contact-name" type="text" name="name" placeholder="Nume" required class="w-full p-3 border rounded" data-i18n-placeholder="name">
+  </div>
+  <div>
+    <label for="contact-email" class="sr-only">Email</label>
+    <input id="contact-email" type="email" name="email" placeholder="Email" required class="w-full p-3 border rounded" data-i18n-placeholder="email">
+  </div>
+  <div>
+    <label for="contact-message" class="sr-only">Mesaj</label>
+    <textarea id="contact-message" name="message" rows="5" placeholder="Mesaj" required class="w-full p-3 border rounded" data-i18n-placeholder="message"></textarea>
+  </div>
+  <button type="submit" class="bg-[#5D8CA7] text-white px-6 py-3 rounded hover:bg-[#4a708b] transition" data-i18n="submit">Trimite</button>
+</form>
     </div>
 
     <!-- Info contact + Harta -->
@@ -381,50 +396,98 @@ function setLang(lang) {
 }
 </script>
 <script>
-const btn = document.getElementById('menu-btn');
-const menu = document.getElementById('mobile-menu');
+/* SCRIPT CONSOLIDAT:
+   - gestionează setarea limbii (localStorage)
+   - inițializează AOS (dacă nu e inițializat deja)
+   - gestionează meniul mobil + overlay + ARIA + ESC + focus
+   - previne scroll orizontal
+   - scroll la hash la load
+*/
 
-btn.addEventListener('click', () => {
-  menu.classList.toggle('hidden');
-});
+document.addEventListener('DOMContentLoaded', () => {
+  // --- Prevent horizontal overflow (quick fix) ---
+  document.body.style.overflowX = 'hidden';
 
-  // Fix automat pentru orice element care creează scroll orizontal
-document.addEventListener("DOMContentLoaded", () => {
-  document.body.style.overflowX = "hidden"; // doar body
-});
+  // --- Language (i18n) persist & init ---
+  const savedLang = localStorage.getItem('site-lang') || 'ro';
+  setLang(savedLang);
 
+  // Attach click handlers for language buttons (if they use onclick attr)
+  document.querySelectorAll("button[onclick^=\"setLang\"]").forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      // extract lang from onclick attr: setLang('ro')
+      const onclickVal = btn.getAttribute('onclick');
+      const m = onclickVal && onclickVal.match(/setLang\('(.+)'\)/);
+      const lang = m ? m[1] : null;
+      if (lang) {
+        setLang(lang);
+        localStorage.setItem('site-lang', lang);
+      }
+    });
+  });
+
+  // --- AOS init (ensure AOS exists) ---
+  if (window.AOS && typeof window.AOS.init === 'function') {
+    AOS.init();
+  }
+
+  // --- Mobile menu logic (accessible) ---
+  const btn = document.getElementById('menu-btn');
+  const menu = document.getElementById('mobile-menu');
   const menuOverlay = document.getElementById('menu-overlay');
 
-btn.addEventListener('click', () => {
-  menu.classList.toggle('hidden');
+  if (btn && menu && menuOverlay) {
+    // ensure ARIA attributes present
+    btn.setAttribute('aria-controls', 'mobile-menu');
+    btn.setAttribute('aria-expanded', btn.getAttribute('aria-expanded') || 'false');
+    menu.setAttribute('aria-hidden', menu.classList.contains('hidden') ? 'true' : 'false');
 
-  // Activează overlay-ul când meniul este deschis
-  if (!menu.classList.contains('hidden')) {
-    document.body.classList.add('menu-open');
-    menuOverlay.style.display = "block";
-  } else {
-    document.body.classList.remove('menu-open');
-    menuOverlay.style.display = "none";
+    // helper open/close
+    function openMenu() {
+      menu.classList.remove('hidden');
+      document.body.classList.add('menu-open', 'overflow-hidden'); // Tailwind class available
+      menuOverlay.style.display = 'block';
+      btn.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+      // focus first focusable element in menu
+      const first = menu.querySelector('a, button');
+      if (first) first.focus();
+    }
+
+    function closeMenu() {
+      menu.classList.add('hidden');
+      document.body.classList.remove('menu-open', 'overflow-hidden');
+      menuOverlay.style.display = 'none';
+      btn.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+      btn.focus();
+    }
+
+    // toggle on click
+    btn.addEventListener('click', (e) => {
+      if (menu.classList.contains('hidden')) openMenu();
+      else closeMenu();
+    });
+
+    // close on overlay click
+    menuOverlay.addEventListener('click', closeMenu);
+
+    // close on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (!menu.classList.contains('hidden')) closeMenu();
+      }
+    });
   }
-});
 
-// Ascunde meniul și overlay-ul la click pe overlay
-menuOverlay.addEventListener('click', () => {
-  menu.classList.add('hidden');
-  document.body.classList.remove('menu-open');
-  menuOverlay.style.display = "none";
-});
-
-</script>
-<script>
-// Scroll instant la ancore fără întârziere
-document.addEventListener("DOMContentLoaded", () => {
-  // Dacă URL-ul are hash
+  // --- Smooth scroll to anchor on load if hash present ---
   if (window.location.hash) {
     const target = document.querySelector(window.location.hash);
     if (target) {
-      // Scroll instant, nu smooth
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // small timeout to allow layout to settle
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
     }
   }
 });
