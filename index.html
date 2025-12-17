@@ -45,7 +45,7 @@
     }
   }
 
-  #menu-overlay {
+#menu-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -54,8 +54,10 @@
     background: rgba(0,0,0,0.4);
     display: none;
     z-index: 40;
-    backdrop-blur: 2px;
-  }
+    /* LINIA CORECTATĂ MAI JOS: */
+    backdrop-filter: blur(2px); 
+    -webkit-backdrop-filter: blur(2px); /* Necesar pentru suport complet pe Safari/iOS */
+}
 
   #mobile-menu {
     z-index: 100;
