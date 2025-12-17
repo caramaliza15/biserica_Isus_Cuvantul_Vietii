@@ -23,7 +23,7 @@
   header h1 {
     font-size: 1.1rem !important;   /* un pic mai mare decât 1rem */
     line-height: 1.20 !important;
-    white-space: normal;
+    white-space: nowrap;  /* ca să stea pe o singură linie */
   }
 }
 #menu-overlay {
@@ -42,52 +42,25 @@
   pointer-events: auto;
 }
 
-/* FIX GLOBAL MOBILE – NU LASĂ NIMIC SĂ IASĂ DIN ECRAN */
-html, body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
+    /* Elimină scroll-ul orizontal provocat de elemente care depășesc ecranul */
+  body, html { overscroll-behavior: auto; }
 
-/* Toate elementele respectă lățimea ecranului */
-* {
-  max-width: 100%;
-  box-sizing: border-box;
-}
+    /* Forțează toate elementele să nu depășească ecranul */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
 
-/* Texte lungi – NU ies din ecran */
-p, h1, h2, h3, h4, h5, h6, span, a, li {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-/* Imagini & iframe-uri PERFECT RESPONSIVE */
-img, iframe, video {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-/* FIX special pentru HERO image */
-#acasa img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Elimină orice scroll lateral accidental */
-body {
-  position: relative;
-  overflow-x: hidden;
-}
-
+  /* Fix pentru imagini și iframe-uri */
+  img, iframe {
+    max-width: 100%;
+  }
   </style>
 </head>
 <body class="bg-white text-[#1f2937]">
 
 <!-- Header -->
 <header class="fixed w-full bg-white/90 backdrop-blur-md shadow z-50">
-<div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2 overflow-hidden">
+  <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center px-4 py-2">
     <!-- Logo + Titlu -->
     <div class="flex items-center space-x-2">
       <img src="images/logo.png" alt="Logo Biserica" class="h-14 w-auto" />
@@ -129,7 +102,7 @@ body {
   </div>
 
   <!-- Meniu mobil -->
-<div id="mobile-menu" class="hidden md:hidden bg-white shadow-md fixed top-0 left-0 right-0 w-full max-w-full overflow-x-hidden">
+  <div id="mobile-menu" class="hidden md:hidden bg-white shadow-md fixed top-0 left-0 right-0">
     <ul class="flex flex-col gap-4 p-4 text-center">
       <li><a href="#acasa" class="hover:text-[#41678f]" data-i18n="home">Acasă</a></li>
       <li><a href="#despre" class="hover:text-[#41678f]" data-i18n="about">Despre</a></li>
@@ -149,7 +122,7 @@ body {
 <div id="menu-overlay"></div>
 
 <!-- Hero / Verset -->
-<section id="acasa" class="relative w-full min-h-[80svh] flex items-center justify-center overflow-hidden">
+<section id="acasa" class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
 <img src="images/img1.jpg"
      alt="Interior biserică - verset"
      class="absolute inset-0 w-full h-full object-cover block"
@@ -186,7 +159,7 @@ body {
 <!-- Predici -->
 <section id="predici" class="scroll-mt-24 py-16 px-6 max-w-4xl mx-auto bg-white text-[#1f2937]" data-aos="fade-left">
   <h2 class="text-3xl font-bold text-center mb-6" data-i18n="sermons1">Predici Recente</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div class="grid md:grid-cols-2 gap-6">
     <div class="bg-[#41678f] text-white rounded shadow p-4 transform hover:scale-105 transition duration-300">
       <h3 class="text-xl font-semibold" data-i18n="sermon1">Credința care mută munții</h3>
       <p class="text-sm" data-i18n="preacher1">Pastor Spiridon Cozaru</p>
@@ -202,7 +175,7 @@ body {
 <section id="noutati" class="scroll-mt-24 bg-[#41678f] text-white py-16 px-6" data-aos="fade-right">
   <div class="max-w-5xl mx-auto">
     <h2 class="text-3xl font-bold text-center mb-10" data-i18n="news1">Noutăți & Evenimente</h2>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid md:grid-cols-3 gap-6">
       <div class="bg-white text-[#1f2937] p-4 shadow rounded transform hover:scale-105 transition duration-300">
         <h3 class="font-bold mb-2" data-i18n="post_date_1">Post și rugăciune – 15 iunie</h3>
         <p class="text-sm" data-i18n="post_descr_1">Vino alături de noi într-o zi specială de post și rugăciune pentru satul Lozova.</p>
@@ -269,6 +242,7 @@ body {
 </footer>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>AOS.init();</script>
 
 <script>
 const translations = {
