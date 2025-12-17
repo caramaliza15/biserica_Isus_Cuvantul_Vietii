@@ -29,14 +29,15 @@
     position: relative;
   }
 
-  /* FIX iOS Scroll Lock când meniul e deschis */
+@media (max-width: 768px) {
   html.menu-open,
   body.menu-open {
     overflow: hidden !important;
     height: 100vh;
-    position: fixed; /* Blochează scroll-ul forțat pe Safari iOS */
+    position: fixed;
     width: 100%;
   }
+}
 
   /* Ajustare titlu pe telefoane mici */
   @media (max-width: 640px) {
@@ -487,6 +488,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 });
+window.addEventListener('resize', () => {
+  if (window.innerWidth >= 768) {
+    document.documentElement.classList.remove('menu-open');
+    document.body.classList.remove('menu-open');
+
+    const menu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('menu-overlay');
+
+    if (menu) menu.classList.add('hidden');
+    if (overlay) overlay.style.display = 'none';
+  }
+});
+
 </script>
 </body>
 </html>
