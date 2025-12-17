@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Biserica Isus Cuvântul Vieții din Lozova – program, predici, evenimente și contact.">
   <title>Isus Cuvântul Vieții</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
@@ -11,64 +10,77 @@
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
   <style>
     body { font-family: 'Nunito', sans-serif; }
-  html { scroll-behavior: smooth; }
-  
-  .pulse-animation {
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-  }
-
-  /* FIX GLOBAL MOBILE – Previne scroll lateral */
-  html, body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-    position: relative;
-  }
-
-@media (max-width: 768px) {
-  html.menu-open,
-  body.menu-open {
-    overflow: hidden !important;
-    height: 100vh;
-    position: fixed;
-    width: 100%;
-  }
-}
-
-  /* Ajustare titlu pe telefoane mici */
-  @media (max-width: 640px) {
-    header h1 {
-      font-size: 1.1rem !important;
-      line-height: 1.2 !important;
+    html { scroll-behavior: smooth; }
+    .pulse-animation {
+      animation: pulse 2s infinite;
     }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    /* Micșorează titlul doar pe telefoane */
+    @media (max-width: 640px) {
+  header h1 {
+    font-size: 1.1rem !important;   /* un pic mai mare decât 1rem */
+    line-height: 1.20 !important;
+    white-space: normal;
   }
-
+}
 #menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.4);
-    display: none;
-    z-index: 40;
-    /* LINIA CORECTATĂ MAI JOS: */
-    backdrop-filter: blur(2px); 
-    -webkit-backdrop-filter: blur(2px); /* Necesar pentru suport complet pe Safari/iOS */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: none;
+  z-index: 9;
+  pointer-events: none;
+}
+  /* Când meniul este deschis, overlay-ul poate primi click */
+.menu-open #menu-overlay {
+  pointer-events: auto;
 }
 
-  #mobile-menu {
-    z-index: 100;
-  }
+/* FIX GLOBAL MOBILE – NU LASĂ NIMIC SĂ IASĂ DIN ECRAN */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
-  /* Previne elementele AOS să creeze scroll lateral */
-  [data-aos] {
-    overflow: hidden;
-  }
+/* Toate elementele respectă lățimea ecranului */
+* {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Texte lungi – NU ies din ecran */
+p, h1, h2, h3, h4, h5, h6, span, a, li {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Imagini & iframe-uri PERFECT RESPONSIVE */
+img, iframe, video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* FIX special pentru HERO image */
+#acasa img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Elimină orice scroll lateral accidental */
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
   </style>
 </head>
 <body class="bg-white text-[#1f2937]">
@@ -137,7 +149,7 @@
 <div id="menu-overlay"></div>
 
 <!-- Hero / Verset -->
-<section id="acasa" class="relative w-full min-h-[80vh] flex items-center justify-center overflow-hidden">
+<section id="acasa" class="relative w-full min-h-[80svh] flex items-center justify-center overflow-hidden">
 <img src="images/img1.jpg"
      alt="Interior biserică - verset"
      class="absolute inset-0 w-full h-full object-cover block"
@@ -407,13 +419,26 @@ function setLang(lang) {
 }
 </script>
 <script>
+/* SCRIPT CONSOLIDAT:
+   - gestionează setarea limbii (localStorage)
+   - inițializează AOS (dacă nu e inițializat deja)
+   - gestionează meniul mobil + overlay + ARIA + ESC + focus
+   - previne scroll orizontal
+   - scroll la hash la load
+*/
+
 document.addEventListener('DOMContentLoaded', () => {
-  // --- PĂSTREAZĂ zona de i18n (limbi) de aici ---
+  // --- Prevent horizontal overflow (quick fix) ---
+  document.body.style.overflowX = 'hidden';
+
+  // --- Language (i18n) persist & init ---
   const savedLang = localStorage.getItem('site-lang') || 'ro';
   setLang(savedLang);
 
+  // Attach click handlers for language buttons (if they use onclick attr)
   document.querySelectorAll("button[onclick^=\"setLang\"]").forEach(btn => {
     btn.addEventListener('click', (e) => {
+      // extract lang from onclick attr: setLang('ro')
       const onclickVal = btn.getAttribute('onclick');
       const m = onclickVal && onclickVal.match(/setLang\('(.+)'\)/);
       const lang = m ? m[1] : null;
@@ -424,83 +449,71 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // --- AOS init (ensure AOS exists) ---
   if (window.AOS && typeof window.AOS.init === 'function') {
     AOS.init();
   }
-  // --- PÂNĂ AICI ---
 
-  // ACUM ȘTERGE TOT CE ERA VECHI ȘI LIPESTE CODUL NOU:
-
-  // --- Mobile menu logic (iOS Stable) ---
+  // --- Mobile menu logic (accessible) ---
   const btn = document.getElementById('menu-btn');
   const menu = document.getElementById('mobile-menu');
   const menuOverlay = document.getElementById('menu-overlay');
 
-  function openMenu() {
-    menu.classList.remove('hidden');
-    menuOverlay.style.display = 'block';
-    document.documentElement.classList.add('menu-open');
-    document.body.classList.add('menu-open');
-    btn.setAttribute('aria-expanded', 'true');
-    menu.setAttribute('aria-hidden', 'false');
-  }
-
-  function closeMenu() {
-    menu.classList.add('hidden');
-    menuOverlay.style.display = 'none';
-    document.documentElement.classList.remove('menu-open');
-    document.body.classList.remove('menu-open');
-    btn.setAttribute('aria-expanded', 'false');
-    menu.setAttribute('aria-hidden', 'true');
-  }
-
   if (btn && menu && menuOverlay) {
+    // ensure ARIA attributes present
+    btn.setAttribute('aria-controls', 'mobile-menu');
+    btn.setAttribute('aria-expanded', btn.getAttribute('aria-expanded') || 'false');
+    menu.setAttribute('aria-hidden', menu.classList.contains('hidden') ? 'true' : 'false');
+
+    // helper open/close
+    function openMenu() {
+      menu.classList.remove('hidden');
+      document.body.classList.add('menu-open', 'overflow-hidden'); // Tailwind class available
+      menuOverlay.style.display = 'block';
+      btn.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+      // focus first focusable element in menu
+      const first = menu.querySelector('a, button');
+      if (first) first.focus();
+    }
+
+    function closeMenu() {
+      menu.classList.add('hidden');
+      document.body.classList.remove('menu-open', 'overflow-hidden');
+      menuOverlay.style.display = 'none';
+      btn.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+      btn.focus();
+    }
+
+    // toggle on click
     btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (menu.classList.contains('hidden')) {
-        openMenu();
-      } else {
-        closeMenu();
-      }
+      if (menu.classList.contains('hidden')) openMenu();
+      else closeMenu();
     });
 
+    // close on overlay click
     menuOverlay.addEventListener('click', closeMenu);
 
-    const mobileLinks = menu.querySelectorAll('a');
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', closeMenu);
-    });
-
+    // close on ESC
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
-        closeMenu();
+      if (e.key === 'Escape') {
+        if (!menu.classList.contains('hidden')) closeMenu();
       }
     });
   }
 
-  // --- Smooth scroll la load (Păstrează și asta la final) ---
+  // --- Smooth scroll to anchor on load if hash present ---
   if (window.location.hash) {
     const target = document.querySelector(window.location.hash);
     if (target) {
+      // small timeout to allow layout to settle
       setTimeout(() => {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 50);
     }
   }
 });
-window.addEventListener('resize', () => {
-  if (window.innerWidth >= 768) {
-    document.documentElement.classList.remove('menu-open');
-    document.body.classList.remove('menu-open');
-
-    const menu = document.getElementById('mobile-menu');
-    const overlay = document.getElementById('menu-overlay');
-
-    if (menu) menu.classList.add('hidden');
-    if (overlay) overlay.style.display = 'none';
-  }
-});
-
 </script>
 </body>
 </html>
