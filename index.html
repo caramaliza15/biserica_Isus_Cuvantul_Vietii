@@ -25,11 +25,6 @@
     line-height: 1.20 !important;
     white-space: nowrap;  /* ca să stea pe o singură linie */
   }
-  header {
-  left: 0;
-  right: 0;
-  max-width: 100vw;
-}
 }
 #menu-overlay {
   position: fixed;
@@ -47,10 +42,8 @@
   pointer-events: auto;
 }
 
-html, body {
-  max-width: 100%;
-  overflow-x: hidden;
-}
+    /* Elimină scroll-ul orizontal provocat de elemente care depășesc ecranul */
+  body, html { overscroll-behavior: auto; }
 
     /* Forțează toate elementele să nu depășească ecranul */
   *, *::before, *::after {
@@ -109,7 +102,7 @@ html, body {
   </div>
 
   <!-- Meniu mobil -->
-<div id="mobile-menu" class="fixed top-0 inset-x-0 w-screen">
+  <div id="mobile-menu" class="hidden md:hidden bg-white shadow-md fixed top-0 left-0 right-0">
     <ul class="flex flex-col gap-4 p-4 text-center">
       <li><a href="#acasa" class="hover:text-[#41678f]" data-i18n="home">Acasă</a></li>
       <li><a href="#despre" class="hover:text-[#41678f]" data-i18n="about">Despre</a></li>
